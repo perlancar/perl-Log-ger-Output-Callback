@@ -12,7 +12,7 @@ sub get_hooks {
     my $hooks = {};
 
     if ($conf{logging_cb}) {
-        $hooks->{create_log_routine} = [
+        $hooks->{create_logml_routine} = [
             __PACKAGE__, 50,
             sub {
                 my %args = @_;
@@ -48,8 +48,8 @@ sub get_hooks {
 =head1 SYNOPSIS
 
  use Log::ger::Output Callback => (
-     logging_cb   => sub { my ($ctx, $msg) = @_; ... }, # optional
-     detection_cb => sub { my ($lvl) = @_; ... },       # optional
+     logging_cb   => sub { my ($ctx, $numlevel, $msg) = @_; ... }, # optional
+     detection_cb => sub { my ($numlevel) = @_; ... },             # optional
  );
 
 
