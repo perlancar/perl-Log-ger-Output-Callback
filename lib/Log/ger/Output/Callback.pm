@@ -55,10 +55,11 @@ sub get_hooks {
 
 =head1 DESCRIPTION
 
-This output is an easy way to do custom logging in L<Log::ger>. If you want to
-be more proper, you can also create your own output plugin, e.g.
+This output plugin provides an easy way to do custom logging in L<Log::ger>. If
+you want to be more proper, you can also create your own output plugin, e.g.
 L<Log::ger::Output::Screen> or L<Log::ger::Output::File>. To do so, follow the
-tutorial in L<Log::ger::Manual::Tutorial::49_WritingAnOutputPlugin>.
+tutorial in L<Log::ger::Manual::Tutorial::49_WritingAnOutputPlugin> or
+alternatively just peek at the source code of this module.
 
 
 =head1 CONFIGURATION
