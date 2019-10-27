@@ -13,9 +13,10 @@ sub get_hooks {
 
     if ($conf{logging_cb}) {
         $hooks->{create_logml_routine} = [
-            __PACKAGE__, 50,
-            sub {
-                my %args = @_;
+            __PACKAGE__, # key
+            50,          # priority
+            sub {        # hook
+                my %hook_args = @_;
                 my $logger = sub {
                     $conf{logging_cb}->(@_);
                 };
@@ -26,11 +27,12 @@ sub get_hooks {
 
     if ($conf{detection_cb}) {
         $hooks->{create_is_routine} = [
-            __PACKAGE__, 50,
-            sub {
-                my %args = @_;
+            __PACKAGE__, # key
+            50,          # priority
+            sub {        # hook
+                my %hook_args = @_;
                 my $logger = sub {
-                    $conf{detection_cb}->($args{level});
+                    $conf{detection_cb}->($hook_args{level});
                 };
                 [$logger];
             },
