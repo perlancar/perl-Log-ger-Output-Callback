@@ -5,6 +5,7 @@ package Log::ger::Output::Callback;
 # DIST
 # VERSION
 
+use 5.010001;
 use strict;
 use warnings;
 
@@ -22,11 +23,12 @@ sub get_hooks {
             9,           # priority
             sub {        # hook
                 my %hook_args = @_;
-                my $logger = sub {
+                my $outputter = sub {
                     my ($per_target_conf, $msg, $per_msg_conf) = @_;
-                    $plugin_conf{logging_cb}->($per_target_conf, $hook_args{level}, $msg, $per_msg_conf);
+                    my $level = $per_msg_conf->{level} // $hook_args{level};
+                    $plugin_conf{logging_cb}->($per_target_conf, $level, $msg, $per_msg_conf);
                 };
-                [$logger];
+                [$outputter];
             },
         ];
     }
@@ -37,10 +39,10 @@ sub get_hooks {
             9,          # priority
             sub {        # hook
                 my %hook_args = @_;
-                my $logger = sub {
+                my $level_checker = sub {
                     $plugin_conf{detection_cb}->($hook_args{level});
                 };
-                [$logger];
+                [$level_checker];
             },
         ];
     }
