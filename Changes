@@ -1,3 +1,8 @@
+0.006   2020-03-07  Released-By: PERLANCAR; Urgency: medium
+
+	- Handle multilevel logger.
+
+
 0.005   2020-03-07  Released-By: PERLANCAR; Urgency: medium
 
 	- Adjust with Log::ger 0.033 (renamed hook names, no more
