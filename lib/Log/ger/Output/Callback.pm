@@ -1,38 +1,44 @@
 package Log::ger::Output::Callback;
 
+# AUTHORITY
 # DATE
+# DIST
 # VERSION
 
 use strict;
 use warnings;
 
 sub get_hooks {
-    my %conf = @_;
+    my %plugin_conf = @_;
 
     my $hooks = {};
 
-    if ($conf{logging_cb}) {
-        $hooks->{create_logml_routine} = [
+    if ($plugin_conf{logging_cb}) {
+        $hooks->{create_outputter} = [
             __PACKAGE__, # key
-            50,          # priority
+            # we want to handle all levels, thus we need to be higher priority
+            # than default Log::ger hooks (10) which will install null loggers
+            # for less severe levels.
+            9,           # priority
             sub {        # hook
                 my %hook_args = @_;
                 my $logger = sub {
-                    $conf{logging_cb}->(@_);
+                    my ($per_target_conf, $msg, $per_msg_conf) = @_;
+                    $plugin_conf{logging_cb}->($per_target_conf, $hook_args{level}, $msg, $per_msg_conf);
                 };
                 [$logger];
             },
         ];
     }
 
-    if ($conf{detection_cb}) {
-        $hooks->{create_is_routine} = [
+    if ($plugin_conf{detection_cb}) {
+        $hooks->{create_level_checker} = [
             __PACKAGE__, # key
-            50,          # priority
+            9,          # priority
             sub {        # hook
                 my %hook_args = @_;
                 my $logger = sub {
-                    $conf{detection_cb}->($hook_args{level});
+                    $plugin_conf{detection_cb}->($hook_args{level});
                 };
                 [$logger];
             },
@@ -50,8 +56,8 @@ sub get_hooks {
 =head1 SYNOPSIS
 
  use Log::ger::Output Callback => (
-     logging_cb   => sub { my ($ctx, $numlevel, $msg) = @_; ... }, # optional
-     detection_cb => sub { my ($numlevel) = @_; ... },             # optional
+     logging_cb   => sub { my ($per_target_conf, $lvlnum, $msg, $per_msg_conf) = @_; ... }, # optional
+     detection_cb => sub { my ($lvlnum) = @_; ... },                                        # optional
  );
 
 
