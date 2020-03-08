@@ -22,7 +22,7 @@ sub get_hooks {
             # for less severe levels.
             9,           # priority
             sub {        # hook
-                my %hook_args = @_;
+                my %hook_args = @_; # see Log::ger::Manual::Internals/"Arguments passed to hook"
                 my $outputter = sub {
                     my ($per_target_conf, $msg, $per_msg_conf) = @_;
                     my $level = $per_msg_conf->{level} // $hook_args{level};
@@ -38,7 +38,7 @@ sub get_hooks {
             __PACKAGE__, # key
             9,          # priority
             sub {        # hook
-                my %hook_args = @_;
+                my %hook_args = @_; # see Log::ger::Manual::Internals/"Arguments passed to hook"
                 my $level_checker = sub {
                     $plugin_conf{detection_cb}->($hook_args{level});
                 };
